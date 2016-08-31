@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load static %}
+    <meta charset="utf-8">
+    <title>Belt Exam2</title>
+    <link rel= 'stylesheet' type= 'text/css' href= "{% static 'belt/index.css' %}">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  <body>
+    <div id= "container">
+      <a href="/logout">Logout</a>
+      <a href="/show">Home</a>
+      <h1>Hello, {{user.name}}!</h1>
+      <h2>Here are your appointments for today, {{today}}</h2>
+      <table>
+        <thead>
+          <tr>
+            <td>
+              Tasks
+            </td>
+            <td>
+              Time
+            </td>
+            <td>
+              Status
+            </td>
+            <td>
+              Action
+            </td>
+          </tr>
+          <tbody>
+            {% for today in todaytask %}
+            <tr>
+              <td>
+                {{today.task}}
+              </td>
+              <td>
+                {{today.time}}
+              </td>
+              <td>
+                {{today.status}}
+              </td>
+              <td>
+                {% if today.status != "done" %}
+              <a href= "/appointments/{{today.id}}">edit</a> <a href= "/appointments/delete/{{today.id}}">delete</a>
+              </td>
+              {% endif %}
+            </tr>
+            {% endfor %}
+          </tbody>
+        </thead>
+      </table>
+      <h2>Your other appointments</h2>
+      <table>
+        <thead>
+          <tr>
+            <td>
+              Tasks
+            </td>
+            <td>
+              Date
+            </td>
+            <td>
+              Time
+            </td>
+          </tr>
+          <tbody>
+            {% for task in futuretask %}
+            <tr>
+              <td>
+                {{task.task}}
+              </td>
+              <td>
+                {{task.date}}
+              </td>
+              <td>
+                {{task.time}}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </thead>
+      </table>
+      <form class="form-horizontal" action="/appointment/add" method="post" role="form">
+        {% csrf_token %}
+        <div class="form-group">
+          <label class="control-label col-sm-1" for="task">Tasks:</label>
+          <div class="col-sm-6">
+            <input type="text" class="form-control" id="task" name= "task" placeholder="Enter task">
+          </div>
+        </div>
+        {% for errors in taskerror %}
+        {{errors}}
+        {% endfor %}
+        <div class="form-group">
+      <label class="control-label col-sm-1" for="dateto">Date:</label>
+      <div class="col-sm-6">
+        <input type="date" class="form-control" id="taskdate " name= "taskdate" placeholder="Enter taskdate">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="control-label col-sm-1" for="dateto">Time:</label>
+      <div class="col-sm-6">
+        <input type="time" class="form-control" id="time" name= "time" placeholder="Enter time">
+      </div>
+    </div>
+        <div class="form-group">
+          <div class="col-sm-offset-3 col-sm-4">
+            <button type="submit" class="btn btn-default" >Add</button>
+          </div>
+        </div>
+      </form>
+  </div>
+  </body>
+</html>
